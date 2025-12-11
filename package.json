@@ -1,7 +1,7 @@
 {
   "name": "@entrolytics/react-sdk",
   "version": "2.0.0",
-  "description": "React SDK for Entrolytics - First-party growth analytics with Web Vitals and Form tracking",
+  "description": "React SDK for Entrolytics - First-party growth analytics for the edge",
   "keywords": [
     "entrolytics",
     "analytics",
@@ -59,8 +59,8 @@
     "@biomejs/biome": "2.3.8",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "react": "^19.2.2",
+    "react-dom": "^19.2.2",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.15"
