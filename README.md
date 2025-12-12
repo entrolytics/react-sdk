@@ -1,21 +1,89 @@
-# @entrolytics/react
+<div align="center">
+  <img src="https://raw.githubusercontent.com/entrolytics/.github/main/media/entrov2.png" alt="Entrolytics" width="64" height="64">
 
-React SDK for [Entrolytics](https://ng.entrolytics.click) - First-party growth analytics for the edge.
+  [![npm](https://img.shields.io/npm/v/@entrolytics/react-sdk.svg?logo=npm)](https://www.npmjs.com/package/@entrolytics/react-sdk)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![React](https://img.shields.io/badge/React-18+-61DAFB.svg?logo=react&logoColor=black)](https://react.dev/)
 
-> **Note:** For Next.js applications, use [@entrolytics/nextjs](https://www.npmjs.com/package/@entrolytics/nextjs) instead.
+</div>
+
+---
+
+## Overview
+
+**@entrolytics/react-sdk** is the official React SDK for Entrolytics - first-party growth analytics for the edge. Add powerful analytics to your React applications with minimal setup.
+
+**Why use this SDK?**
+- Zero-config setup with automatic environment detection
+- React hooks for event tracking and user identification
+- TypeScript-first with complete type definitions
+- Edge-optimized with sub-50ms response times globally
+
+> **Note:** For Next.js applications, use [@entrolytics/nextjs-sdk](https://www.npmjs.com/package/@entrolytics/nextjs-sdk) instead.
+
+## Key Features
+
+<table>
+<tr>
+<td width="50%">
+
+### Analytics
+- Automatic page view tracking
+- Custom event tracking
+- User identification
+- Revenue tracking
+
+</td>
+<td width="50%">
+
+### Developer Experience
+- React Context + Hooks API
+- `<TrackClick>` and `<OutboundLink>` components
+- Tree-shakeable (~2KB gzipped)
+- Full TypeScript support
+
+</td>
+</tr>
+</table>
+
+## Quick Start
+
+<table>
+<tr>
+<td align="center" width="25%">
+<img src="https://api.iconify.design/lucide:download.svg?color=%236366f1" width="48"><br>
+<strong>1. Install</strong><br>
+<code>npm i @entrolytics/react-sdk</code>
+</td>
+<td align="center" width="25%">
+<img src="https://api.iconify.design/lucide:code.svg?color=%236366f1" width="48"><br>
+<strong>2. Add Component</strong><br>
+<code>&lt;Analytics /&gt;</code>
+</td>
+<td align="center" width="25%">
+<img src="https://api.iconify.design/lucide:settings.svg?color=%236366f1" width="48"><br>
+<strong>3. Configure</strong><br>
+Set Website ID in <code>.env</code>
+</td>
+<td align="center" width="25%">
+<img src="https://api.iconify.design/lucide:bar-chart-3.svg?color=%236366f1" width="48"><br>
+<strong>4. Track</strong><br>
+View analytics in dashboard
+</td>
+</tr>
+</table>
 
 ## Installation
 
 ```bash
-npm install @entrolytics/react
+npm install @entrolytics/react-sdk
 # or
-pnpm add @entrolytics/react
+pnpm add @entrolytics/react-sdk
 ```
 
-## Quick Start
-
 ```tsx
-import { Analytics, useTrackEvent } from '@entrolytics/react';
+import { Analytics, useTrackEvent } from '@entrolytics/react-sdk';
 
 function App() {
   return (
