@@ -115,7 +115,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
       .then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {
         const reportOpts = { reportAllChanges };
 
-        onLCP((metric) => {
+        onLCP(metric => {
           trackVital({
             metric: 'LCP',
             value: metric.value,
@@ -127,7 +127,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
           });
         }, reportOpts);
 
-        onINP((metric) => {
+        onINP(metric => {
           trackVital({
             metric: 'INP',
             value: metric.value,
@@ -139,7 +139,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
           });
         }, reportOpts);
 
-        onCLS((metric) => {
+        onCLS(metric => {
           trackVital({
             metric: 'CLS',
             value: metric.value,
@@ -151,7 +151,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
           });
         }, reportOpts);
 
-        onFCP((metric) => {
+        onFCP(metric => {
           trackVital({
             metric: 'FCP',
             value: metric.value,
@@ -163,7 +163,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
           });
         }, reportOpts);
 
-        onTTFB((metric) => {
+        onTTFB(metric => {
           trackVital({
             metric: 'TTFB',
             value: metric.value,

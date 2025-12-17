@@ -20,25 +20,23 @@ export { EntrolyticsProvider, useEntrolyticsContext } from './context.js';
 
 // Core Hooks
 export { useEntrolytics } from './hooks/useEntrolytics.js';
+export type {
+  FormEventData,
+  FormEventType,
+  UseFormTrackingOptions,
+} from './hooks/useFormTracking.js';
+export { useFormTracking } from './hooks/useFormTracking.js';
 export { useIdentify } from './hooks/useIdentify.js';
 export { useTrackEvent } from './hooks/useTrackEvent.js';
 export { useTrackOutboundLink } from './hooks/useTrackOutboundLink.js';
 export { useTrackPageView } from './hooks/useTrackPageView.js';
 export { useTrackRevenue } from './hooks/useTrackRevenue.js';
-
 // Phase 2: Web Vitals & Form Tracking
 export type {
+  NavigationType,
+  UseWebVitalsOptions,
+  WebVitalData,
   WebVitalMetric,
   WebVitalRating,
-  NavigationType,
-  WebVitalData,
-  UseWebVitalsOptions,
 } from './hooks/useWebVitals.js';
 export { useWebVitals } from './hooks/useWebVitals.js';
-
-export type {
-  FormEventType,
-  FormEventData,
-  UseFormTrackingOptions,
-} from './hooks/useFormTracking.js';
-export { useFormTracking } from './hooks/useFormTracking.js';
