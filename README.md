@@ -109,12 +109,12 @@ The `<Analytics />` component automatically reads from your `.env` file:
 
 ```bash
 # Create React App
-REACT_APP_ENTROLYTICS_NG_WEBSITE_ID=your-website-id
-REACT_APP_ENTROLYTICS_HOST=https://ng.entrolytics.click
+REACT_APP_ENTROLYTICS_WEBSITE_ID=your-website-id
+REACT_APP_ENTROLYTICS_HOST=https://entrolytics.click
 
 # Vite
-VITE_ENTROLYTICS_NG_WEBSITE_ID=your-website-id
-VITE_ENTROLYTICS_HOST=https://ng.entrolytics.click
+VITE_ENTROLYTICS_WEBSITE_ID=your-website-id
+VITE_ENTROLYTICS_HOST=https://entrolytics.click
 ```
 
 ## API Reference
@@ -147,7 +147,7 @@ Wrap your app with the provider to enable analytics.
 ```tsx
 <EntrolyticsProvider
   websiteId="your-website-id"
-  host="https://ng.entrolytics.click"  // Optional, for self-hosted
+  host="https://entrolytics.click"  // Optional, for self-hosted
   autoTrack={true}                   // Auto-track page views (default: true)
   respectDnt={false}                 // Respect Do Not Track (default: false)
   domains={['example.com']}          // Cross-domain tracking (optional)

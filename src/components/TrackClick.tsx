@@ -1,12 +1,12 @@
 import type { MouseEvent, ReactElement } from 'react';
 import { cloneElement, isValidElement, useCallback } from 'react';
-import { useEntrolyticsContext } from '../context.js';
+import { useEntrolyticsContext, type EventData } from '../context.js';
 
 export interface TrackClickProps {
   /** Event name to track */
   event: string;
   /** Additional event data */
-  data?: Record<string, unknown>;
+  data?: EventData;
   /** Child element to wrap */
   children: ReactElement;
 }

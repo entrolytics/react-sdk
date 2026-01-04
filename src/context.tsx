@@ -9,12 +9,36 @@ import {
   useState,
 } from 'react';
 
-const DEFAULT_HOST = 'https://ng.entrolytics.click';
+const DEFAULT_HOST = 'https://entrolytics.click';
 const SCRIPT_ID = 'entrolytics-script';
 
-export interface EventData {
-  [key: string]: string | number | boolean | EventData | string[] | number[] | EventData[];
+/**
+ * Event payload type - mirrors @entrolytics/shared EventPayload
+ * TODO: Import from @entrolytics/shared once published with EventPayload export
+ */
+interface EventPayload {
+  websiteId: string;
+  sessionId: string;
+  visitorId: string;
+  url: string;
+  referrer?: string;
+  eventType: string;
+  eventName?: string;
+  properties?: Record<string, unknown>;
+  screenWidth?: number;
+  screenHeight?: number;
+  loadTime?: number;
+  domInteractive?: number;
+  domComplete?: number;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmTerm?: string;
+  utmContent?: string;
 }
+
+// Extract the properties type from EventPayload for easier usage
+export type EventData = NonNullable<EventPayload['properties']>;
 
 export interface EntrolyticsConfig {
   websiteId: string;
@@ -35,8 +59,8 @@ export interface EntrolyticsConfig {
 }
 
 interface EntrolyticsInstance {
-  track: (eventName?: string | object, eventData?: Record<string, unknown>) => void;
-  identify: (data: Record<string, unknown>) => void;
+  track: (eventName?: string | object, eventData?: EventData) => void;
+  identify: (data: EventData) => void;
 }
 
 export interface EntrolyticsContextValue {
@@ -181,7 +205,7 @@ export function EntrolyticsProvider({
           (payload as Record<string, unknown>).tag = tagRef.current;
         }
 
-        window.entrolytics?.track(eventName, eventData);
+        window.entrolytics?.track(eventName, eventData as Record<string, any>);
       });
     },
     [waitForTracker, beforeSend],

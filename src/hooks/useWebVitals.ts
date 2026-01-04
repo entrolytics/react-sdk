@@ -75,7 +75,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
     async (data: WebVitalData) => {
       if (typeof window === 'undefined') return;
 
-      const host = config.host || 'https://ng.entrolytics.click';
+      const host = config.host || 'https://entrolytics.click';
       const payload = {
         website: config.websiteId,
         metric: data.metric,
@@ -123,7 +123,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: metric.attribution as Record<string, unknown>,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
           });
         }, reportOpts);
 
@@ -135,7 +135,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: metric.attribution as Record<string, unknown>,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
           });
         }, reportOpts);
 
@@ -147,7 +147,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: metric.attribution as Record<string, unknown>,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
           });
         }, reportOpts);
 
@@ -159,7 +159,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: metric.attribution as Record<string, unknown>,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
           });
         }, reportOpts);
 
@@ -171,7 +171,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: metric.attribution as Record<string, unknown>,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
           });
         }, reportOpts);
       })

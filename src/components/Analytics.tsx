@@ -4,7 +4,7 @@ import { EntrolyticsProvider } from '../context.js';
 
 export interface AnalyticsProps extends Partial<EntrolyticsConfig> {
   /**
-   * Website ID - defaults to REACT_APP_ENTROLYTICS_NG_WEBSITE_ID or VITE_ENTROLYTICS_NG_WEBSITE_ID
+   * Website ID - defaults to REACT_APP_ENTROLYTICS_WEBSITE_ID or VITE_ENTROLYTICS_WEBSITE_ID
    */
   websiteId?: string;
   /**
@@ -51,8 +51,8 @@ export interface AnalyticsProps extends Partial<EntrolyticsConfig> {
  * ```
  *
  * Environment variables:
- * - Create React App: REACT_APP_ENTROLYTICS_NG_WEBSITE_ID, REACT_APP_ENTROLYTICS_HOST
- * - Vite: VITE_ENTROLYTICS_NG_WEBSITE_ID, VITE_ENTROLYTICS_HOST
+ * - Create React App: REACT_APP_ENTROLYTICS_WEBSITE_ID, REACT_APP_ENTROLYTICS_HOST
+ * - Vite: VITE_ENTROLYTICS_WEBSITE_ID, VITE_ENTROLYTICS_HOST
  */
 export function Analytics({ websiteId, host, children, ...config }: AnalyticsProps) {
   // Support both Create React App (REACT_APP_) and Vite (VITE_) env vars
@@ -65,8 +65,8 @@ export function Analytics({ websiteId, host, children, ...config }: AnalyticsPro
 
   const finalWebsiteId =
     websiteId ||
-    processEnv.REACT_APP_ENTROLYTICS_NG_WEBSITE_ID ||
-    importMetaEnv.VITE_ENTROLYTICS_NG_WEBSITE_ID;
+    processEnv.REACT_APP_ENTROLYTICS_WEBSITE_ID ||
+    importMetaEnv.VITE_ENTROLYTICS_WEBSITE_ID;
 
   const finalHost =
     host || processEnv.REACT_APP_ENTROLYTICS_HOST || importMetaEnv.VITE_ENTROLYTICS_HOST;
@@ -77,8 +77,8 @@ export function Analytics({ websiteId, host, children, ...config }: AnalyticsPro
   if (isDev && !finalWebsiteId) {
     console.warn(
       '[Entrolytics] Missing environment variable. Add one of the following to your .env file:\n' +
-        '  - Create React App: REACT_APP_ENTROLYTICS_NG_WEBSITE_ID\n' +
-        '  - Vite: VITE_ENTROLYTICS_NG_WEBSITE_ID\n' +
+        '  - Create React App: REACT_APP_ENTROLYTICS_WEBSITE_ID\n' +
+        '  - Vite: VITE_ENTROLYTICS_WEBSITE_ID\n' +
         'Or pass websiteId as a prop.',
     );
     return null;
