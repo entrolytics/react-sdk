@@ -56,23 +56,35 @@ export interface AnalyticsProps extends Partial<EntrolyticsConfig> {
  */
 export function Analytics({ websiteId, host, children, ...config }: AnalyticsProps) {
   // Support both Create React App (REACT_APP_) and Vite (VITE_) env vars
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const globalThis = typeof window !== 'undefined' ? window : ({} as any);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const processEnv = (globalThis as any).process?.env || {};
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const importMetaEnv = (import.meta as any).env || {};
+  type ImportMetaEnv = Record<string, string | boolean | undefined>;
+  type GlobalWithProcess = typeof globalThis & {
+    process?: {
+      env?: Record<string, string | undefined>;
+    };
+  };
 
-  const finalWebsiteId =
-    websiteId ||
-    processEnv.REACT_APP_ENTROLYTICS_WEBSITE_ID ||
-    importMetaEnv.VITE_ENTROLYTICS_WEBSITE_ID;
+  const globalRef =
+    typeof window !== 'undefined'
+      ? (window as GlobalWithProcess)
+      : (globalThis as GlobalWithProcess);
+  const processEnv = globalRef.process?.env ?? {};
+  const importMetaEnv = (import.meta as ImportMeta & { env?: ImportMetaEnv }).env ?? {};
 
-  const finalHost =
-    host || processEnv.REACT_APP_ENTROLYTICS_HOST || importMetaEnv.VITE_ENTROLYTICS_HOST;
+  const viteWebsiteId =
+    typeof importMetaEnv.VITE_ENTROLYTICS_WEBSITE_ID === 'string'
+      ? importMetaEnv.VITE_ENTROLYTICS_WEBSITE_ID
+      : undefined;
+  const viteHost =
+    typeof importMetaEnv.VITE_ENTROLYTICS_HOST === 'string'
+      ? importMetaEnv.VITE_ENTROLYTICS_HOST
+      : undefined;
+
+  const finalWebsiteId = websiteId || processEnv.REACT_APP_ENTROLYTICS_WEBSITE_ID || viteWebsiteId;
+
+  const finalHost = host || processEnv.REACT_APP_ENTROLYTICS_HOST || viteHost;
 
   // Show helpful warnings in development
-  const isDev = processEnv.NODE_ENV === 'development' || importMetaEnv.DEV;
+  const isDev = processEnv.NODE_ENV === 'development' || importMetaEnv.DEV === true;
 
   if (isDev && !finalWebsiteId) {
     console.warn(

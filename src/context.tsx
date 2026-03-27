@@ -12,30 +12,7 @@ import {
 const DEFAULT_HOST = 'https://entrolytics.click';
 const SCRIPT_ID = 'entrolytics-script';
 
-/**
- * Event payload type - mirrors @entrolytics/shared EventPayload
- * TODO: Import from @entrolytics/shared once published with EventPayload export
- */
-interface EventPayload {
-  websiteId: string;
-  sessionId: string;
-  visitorId: string;
-  url: string;
-  referrer?: string;
-  eventType: string;
-  eventName?: string;
-  properties?: Record<string, unknown>;
-  screenWidth?: number;
-  screenHeight?: number;
-  loadTime?: number;
-  domInteractive?: number;
-  domComplete?: number;
-  utmSource?: string;
-  utmMedium?: string;
-  utmCampaign?: string;
-  utmTerm?: string;
-  utmContent?: string;
-}
+import type { EventPayload } from '@entrolytics/shared';
 
 // Extract the properties type from EventPayload for easier usage
 export type EventData = NonNullable<EventPayload['properties']>;
@@ -43,6 +20,7 @@ export type EventData = NonNullable<EventPayload['properties']>;
 export interface EntrolyticsConfig {
   websiteId: string;
   host?: string;
+  apiKey?: string;
   autoTrack?: boolean;
   respectDnt?: boolean;
   domains?: string[];
@@ -88,6 +66,7 @@ export interface EntrolyticsProviderProps {
   children: ReactNode;
   websiteId: string;
   host?: string;
+  apiKey?: string;
   autoTrack?: boolean;
   respectDnt?: boolean;
   domains?: string[];
@@ -102,6 +81,7 @@ export function EntrolyticsProvider({
   children,
   websiteId,
   host = DEFAULT_HOST,
+  apiKey,
   autoTrack = true,
   respectDnt = false,
   domains,
@@ -205,7 +185,7 @@ export function EntrolyticsProvider({
           (payload as Record<string, unknown>).tag = tagRef.current;
         }
 
-        window.entrolytics?.track(eventName, eventData as Record<string, any>);
+        window.entrolytics?.track(eventName, eventData as Record<string, unknown>);
       });
     },
     [waitForTracker, beforeSend],
@@ -283,6 +263,7 @@ export function EntrolyticsProvider({
       config: {
         websiteId,
         host,
+        apiKey,
         autoTrack,
         respectDnt,
         domains,
@@ -305,6 +286,7 @@ export function EntrolyticsProvider({
     [
       websiteId,
       host,
+      apiKey,
       autoTrack,
       respectDnt,
       domains,

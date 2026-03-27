@@ -1,6 +1,6 @@
 import type { MouseEvent, ReactElement } from 'react';
 import { cloneElement, isValidElement, useCallback } from 'react';
-import { useEntrolyticsContext, type EventData } from '../context.js';
+import { type EventData, useEntrolyticsContext } from '../context.js';
 
 export interface TrackClickProps {
   /** Event name to track */
@@ -23,14 +23,26 @@ export interface TrackClickProps {
  */
 export function TrackClick({ event, data, children }: TrackClickProps) {
   const { track } = useEntrolyticsContext();
+  type ClickHandler = (event: MouseEvent) => void;
+  type ClickableElementProps = { onClick?: ClickHandler };
+
+  const getChildOnClick = (
+    element: ReactElement<ClickableElementProps>,
+  ): ClickHandler | undefined => {
+    return element.props.onClick;
+  };
 
   const handleClick = useCallback(
     (e: MouseEvent) => {
       track(event, data);
 
       // Call original onClick if it exists
-      if (isValidElement(children) && (children as any).props.onClick) {
-        (children as any).props.onClick(e);
+      if (isValidElement(children)) {
+        const child = children as ReactElement<ClickableElementProps>;
+        const onClick = getChildOnClick(child);
+        if (onClick) {
+          onClick(e);
+        }
       }
     },
     [event, data, track, children],
@@ -41,8 +53,9 @@ export function TrackClick({ event, data, children }: TrackClickProps) {
     return children;
   }
 
-  return cloneElement(children, {
-    ...(children as any).props,
+  const child = children as ReactElement<ClickableElementProps>;
+
+  return cloneElement(child, {
     onClick: handleClick,
   });
 }

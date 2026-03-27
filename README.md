@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/entrolytics/.github/main/media/entrov2.png" alt="Entrolytics" width="64" height="64">
+- <img src="https://raw.githubusercontent.com/entrolytics/.github/main/media/entrov2.png" alt="Entrolytics" width="64" height="64">
 
-  [![npm](https://img.shields.io/npm/v/@entrolytics/react-sdk.svg?logo=npm)](https://www.npmjs.com/package/@entrolytics/react-sdk)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![React](https://img.shields.io/badge/React-18+-61DAFB.svg?logo=react&logoColor=black)](https://react.dev/)
+[![npm](https://img.shields.io/npm/v/@entrolytics/react-sdk.svg?logo=npm)](https://www.npmjs.com/package/@entrolytics/react-sdk)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?logo=typescript\&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB.svg?logo=react\&logoColor=black)](https://react.dev/)
 
 </div>
 
@@ -15,6 +15,7 @@
 **@entrolytics/react-sdk** is the official React SDK for Entrolytics - first-party growth analytics for the edge. Add powerful analytics to your React applications with minimal setup.
 
 **Why use this SDK?**
+
 - Zero-config setup with automatic environment detection
 - React hooks for event tracking and user identification
 - TypeScript-first with complete type definitions
@@ -29,6 +30,7 @@
 <td width="50%">
 
 ### Analytics
+
 - Automatic page view tracking
 - Custom event tracking
 - User identification
@@ -38,9 +40,10 @@
 <td width="50%">
 
 ### Developer Experience
+
 - React Context + Hooks API
 - `<TrackClick>` and `<OutboundLink>` components
-- Tree-shakeable (~2KB gzipped)
+- Tree-shakeable (\~2KB gzipped)
 - Full TypeScript support
 
 </td>
@@ -78,7 +81,9 @@ View analytics in dashboard
 
 ```bash
 npm install @entrolytics/react-sdk
+
 # or
+
 pnpm add @entrolytics/react-sdk
 ```
 
@@ -98,9 +103,7 @@ function CheckoutButton() {
   const trackEvent = useTrackEvent();
 
   return (
-    <button onClick={() => trackEvent('checkout_start', { cart_value: 99.99 })}>
-      Checkout
-    </button>
+    <button onClick={() => trackEvent('checkout_start', { cart_value: 99.99 })}>Checkout</button>
   );
 }
 ```
@@ -108,11 +111,14 @@ function CheckoutButton() {
 The `<Analytics />` component automatically reads from your `.env` file:
 
 ```bash
+
 # Create React App
+
 REACT_APP_ENTROLYTICS_WEBSITE_ID=your-website-id
 REACT_APP_ENTROLYTICS_HOST=https://entrolytics.click
 
 # Vite
+
 VITE_ENTROLYTICS_WEBSITE_ID=your-website-id
 VITE_ENTROLYTICS_HOST=https://entrolytics.click
 ```
@@ -134,7 +140,7 @@ With optional configuration:
   autoTrack={true}
   respectDnt={false}
   domains={['example.com']}
-  useEdgeRuntime={true}  // Use edge-optimized endpoints (default: true)
+  useEdgeRuntime={true} // Use edge-optimized endpoints (default: true)
 />
 ```
 
@@ -147,11 +153,11 @@ Wrap your app with the provider to enable analytics.
 ```tsx
 <EntrolyticsProvider
   websiteId="your-website-id"
-  host="https://entrolytics.click"  // Optional, for self-hosted
-  autoTrack={true}                   // Auto-track page views (default: true)
-  respectDnt={false}                 // Respect Do Not Track (default: false)
-  domains={['example.com']}          // Cross-domain tracking (optional)
-  useEdgeRuntime={true}              // Use edge-optimized endpoints (default: true)
+  host="https://entrolytics.click" // Optional, for self-hosted
+  autoTrack={true} // Auto-track page views (default: true)
+  respectDnt={false} // Respect Do Not Track (default: false)
+  domains={['example.com']} // Cross-domain tracking (optional)
+  useEdgeRuntime={true} // Use edge-optimized endpoints (default: true)
 >
   <App />
 </EntrolyticsProvider>
@@ -162,6 +168,7 @@ Wrap your app with the provider to enable analytics.
 The `useEdgeRuntime` prop controls which tracking script is loaded:
 
 **Edge Runtime (default)** - Optimized for speed and global distribution:
+
 ```tsx
 <EntrolyticsProvider
   websiteId="your-website-id"
@@ -173,23 +180,22 @@ The `useEdgeRuntime` prop controls which tracking script is loaded:
 
 - **Latency**: Sub-50ms response times globally
 - **Best for**: Production apps, globally distributed users
-- **Endpoint**: Uses `/api/send-native` for edge-to-edge communication
+- **Tracker Bundle**: Loads `/script-edge.js` (edge-optimized)
 
 **Node.js Runtime** - Full-featured with advanced capabilities:
+
 ```tsx
-<EntrolyticsProvider
-  websiteId="your-website-id"
-  useEdgeRuntime={false}
->
+<EntrolyticsProvider websiteId="your-website-id" useEdgeRuntime={false}>
   <App />
 </EntrolyticsProvider>
 ```
 
 - **Features**: ClickHouse export, MaxMind GeoIP (city-level accuracy)
 - **Best for**: Self-hosted deployments, advanced analytics requirements
-- **Endpoint**: Uses `/api/send` for Node.js runtime
+- **Tracker Bundle**: Loads `/script.js` (standard runtime)
 
 **When to use Node.js runtime**:
+
 - Self-hosted deployments without edge runtime support
 - Applications requiring ClickHouse data export
 - Need for advanced geo-targeting with MaxMind
@@ -206,7 +212,7 @@ const trackEvent = useTrackEvent();
 
 trackEvent('button_click', {
   variant: 'primary',
-  location: 'hero'
+  location: 'hero',
 });
 ```
 
@@ -236,7 +242,7 @@ useEffect(() => {
   if (user) {
     identify(user.id, {
       email: user.email,
-      plan: user.subscription
+      plan: user.subscription,
     });
   }
 }, [user, identify]);
@@ -261,7 +267,7 @@ import { TrackClick } from '@entrolytics/react';
 
 <TrackClick event="cta_click" data={{ variant: 'hero' }}>
   <button>Get Started</button>
-</TrackClick>
+</TrackClick>;
 ```
 
 #### OutboundLink
@@ -273,7 +279,7 @@ import { OutboundLink } from '@entrolytics/react';
 
 <OutboundLink href="https://github.com/..." event="github_click">
   View on GitHub
-</OutboundLink>
+</OutboundLink>;
 ```
 
 ## TypeScript
@@ -285,7 +291,7 @@ import type {
   EntrolyticsConfig,
   EntrolyticsProviderProps,
   TrackClickProps,
-  OutboundLinkProps
+  OutboundLinkProps,
 } from '@entrolytics/react';
 ```
 
@@ -293,8 +299,8 @@ import type {
 
 This package is tree-shakeable and optimized for minimal bundle size:
 
-- Provider + useTrackEvent: ~1.2KB gzipped
-- Full package: ~2KB gzipped
+- Provider + useTrackEvent: \~1.2KB gzipped
+- Full package: \~2KB gzipped
 
 ## License
 

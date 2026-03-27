@@ -1,15 +1,12 @@
+import { API_ROUTES } from '@entrolytics/shared';
+import type { NavigationType, VitalRating, VitalType } from '@entrolytics/shared';
 import { useCallback, useEffect, useRef } from 'react';
 import { useEntrolyticsContext } from '../context.js';
+import { getOrCreateSessionId, getOrCreateVisitorId } from './identity.js';
 
-export type WebVitalMetric = 'LCP' | 'INP' | 'CLS' | 'TTFB' | 'FCP';
-export type WebVitalRating = 'good' | 'needs-improvement' | 'poor';
-export type NavigationType =
-  | 'navigate'
-  | 'reload'
-  | 'back-forward'
-  | 'back-forward-cache'
-  | 'prerender'
-  | 'restore';
+export type WebVitalMetric = VitalType;
+export type WebVitalRating = VitalRating;
+export type { NavigationType };
 
 export interface WebVitalData {
   /** Metric name (LCP, INP, CLS, TTFB, FCP) */
@@ -70,16 +67,29 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
   const { autoInit = true, reportAllChanges = false } = options;
   const { config, isReady } = useEntrolyticsContext();
   const initialized = useRef(false);
+  const missingApiKeyWarned = useRef(false);
 
   const trackVital = useCallback(
     async (data: WebVitalData) => {
       if (typeof window === 'undefined') return;
 
+      if (!config.apiKey) {
+        if (!missingApiKeyWarned.current) {
+          console.warn('[Entrolytics] apiKey is required for /api/collect/vitals requests');
+          missingApiKeyWarned.current = true;
+        }
+        return;
+      }
+
       const host = config.host || 'https://entrolytics.click';
+      const sessionId = getOrCreateSessionId();
+      const visitorId = getOrCreateVisitorId();
       const payload = {
-        website: config.websiteId,
-        metric: data.metric,
-        value: data.value,
+        websiteId: config.websiteId,
+        sessionId,
+        visitorId,
+        metricName: data.metric,
+        metricValue: data.value,
         rating: data.rating,
         delta: data.delta,
         id: data.id,
@@ -90,9 +100,12 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
       };
 
       try {
-        await fetch(`${host}/api/collect/vitals`, {
+        await fetch(`${host}${API_ROUTES.collectVitals}`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': config.apiKey,
+          },
           body: JSON.stringify(payload),
           keepalive: true,
         });
@@ -100,7 +113,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
         console.error('[Entrolytics] Failed to track vital:', err);
       }
     },
-    [config.websiteId, config.host],
+    [config.websiteId, config.host, config.apiKey],
   );
 
   // Auto-initialize web-vitals integration
@@ -116,62 +129,67 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
         const reportOpts = { reportAllChanges };
 
         onLCP(metric => {
-          trackVital({
+          void trackVital({
             metric: 'LCP',
             value: metric.value,
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> })
+              .attribution,
           });
         }, reportOpts);
 
         onINP(metric => {
-          trackVital({
+          void trackVital({
             metric: 'INP',
             value: metric.value,
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> })
+              .attribution,
           });
         }, reportOpts);
 
         onCLS(metric => {
-          trackVital({
+          void trackVital({
             metric: 'CLS',
             value: metric.value,
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> })
+              .attribution,
           });
         }, reportOpts);
 
         onFCP(metric => {
-          trackVital({
+          void trackVital({
             metric: 'FCP',
             value: metric.value,
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> })
+              .attribution,
           });
         }, reportOpts);
 
         onTTFB(metric => {
-          trackVital({
+          void trackVital({
             metric: 'TTFB',
             value: metric.value,
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
             navigationType: metric.navigationType as NavigationType,
-            attribution: (metric as unknown as { attribution?: Record<string, unknown> }).attribution,
+            attribution: (metric as unknown as { attribution?: Record<string, unknown> })
+              .attribution,
           });
         }, reportOpts);
       })

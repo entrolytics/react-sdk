@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes, MouseEvent } from 'react';
 import { useCallback } from 'react';
-import { useEntrolyticsContext, type EventData } from '../context.js';
+import { type EventData, useEntrolyticsContext } from '../context.js';
 
 export interface OutboundLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** URL to link to */

@@ -1,13 +1,10 @@
+import { API_ROUTES } from '@entrolytics/shared';
+import type { FormEventType } from '@entrolytics/shared';
 import { useCallback, useEffect, useRef } from 'react';
 import { useEntrolyticsContext } from '../context.js';
+import { getOrCreateSessionId, getOrCreateVisitorId } from './identity.js';
 
-export type FormEventType =
-  | 'start'
-  | 'field_focus'
-  | 'field_blur'
-  | 'field_error'
-  | 'submit'
-  | 'abandon';
+export type { FormEventType };
 
 export interface FormEventData {
   /** Form event type */
@@ -97,6 +94,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
   } = options;
   const { config } = useEntrolyticsContext();
   const formRef = useRef<HTMLFormElement | null>(null);
+  const missingApiKeyWarned = useRef(false);
   const stateRef = useRef<FormState>({
     startTime: null,
     fieldStartTimes: new Map(),
@@ -111,7 +109,17 @@ export function useFormTracking(options: UseFormTrackingOptions) {
     ) => {
       if (typeof window === 'undefined') return;
 
+      if (!config.apiKey) {
+        if (!missingApiKeyWarned.current) {
+          console.warn('[Entrolytics] apiKey is required for /api/collect/forms requests');
+          missingApiKeyWarned.current = true;
+        }
+        return;
+      }
+
       const host = config.host || 'https://entrolytics.click';
+      const sessionId = getOrCreateSessionId();
+      const visitorId = getOrCreateVisitorId();
       const payload: FormEventData = {
         formId: data.formId || formId,
         formName: data.formName || formName,
@@ -120,11 +128,16 @@ export function useFormTracking(options: UseFormTrackingOptions) {
       };
 
       try {
-        await fetch(`${host}/api/collect/forms`, {
+        await fetch(`${host}${API_ROUTES.collectForms}`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': config.apiKey,
+          },
           body: JSON.stringify({
-            website: config.websiteId,
+            websiteId: config.websiteId,
+            sessionId,
+            visitorId,
             ...payload,
           }),
           keepalive: true,
@@ -133,13 +146,13 @@ export function useFormTracking(options: UseFormTrackingOptions) {
         console.error('[Entrolytics] Failed to track form event:', err);
       }
     },
-    [config.websiteId, config.host, formId, formName],
+    [config.websiteId, config.host, config.apiKey, formId, formName],
   );
 
   const trackStart = useCallback(() => {
     if (stateRef.current.startTime !== null) return; // Already started
     stateRef.current.startTime = Date.now();
-    trackEvent({ eventType: 'start' });
+    void trackEvent({ eventType: 'start' });
   }, [trackEvent]);
 
   const trackFieldFocus = useCallback(
@@ -159,7 +172,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
 
       state.lastFieldName = fieldName;
 
-      trackEvent({
+      void trackEvent({
         eventType: 'field_focus',
         fieldName,
         fieldType,
@@ -176,7 +189,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
       const fieldStartTime = state.fieldStartTimes.get(fieldName);
       const timeOnField = fieldStartTime ? Date.now() - fieldStartTime : undefined;
 
-      trackEvent({
+      void trackEvent({
         eventType: 'field_blur',
         fieldName,
         fieldType,
@@ -190,7 +203,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
 
   const trackFieldError = useCallback(
     (fieldName: string, errorMessage: string, fieldType?: string, fieldIndex?: number) => {
-      trackEvent({
+      void trackEvent({
         eventType: 'field_error',
         fieldName,
         fieldType,
@@ -206,7 +219,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
 
   const trackSubmit = useCallback(
     (success: boolean) => {
-      trackEvent({
+      void trackEvent({
         eventType: 'submit',
         success,
         timeSinceStart: stateRef.current.startTime
@@ -228,7 +241,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
   const trackAbandon = useCallback(() => {
     if (!stateRef.current.hasInteracted) return; // Only track if user interacted
 
-    trackEvent({
+    void trackEvent({
       eventType: 'abandon',
       fieldName: stateRef.current.lastFieldName || undefined,
       timeSinceStart: stateRef.current.startTime
