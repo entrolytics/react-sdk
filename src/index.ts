@@ -5,9 +5,6 @@ export type { OutboundLinkProps } from './components/OutboundLink.js';
 export { OutboundLink } from './components/OutboundLink.js';
 export type { TrackClickProps } from './components/TrackClick.js';
 export { TrackClick } from './components/TrackClick.js';
-// TrackEvent is an alias for TrackClick
-export type { TrackEventProps } from './components/TrackEvent.js';
-export { TrackEvent } from './components/TrackEvent.js';
 
 // Provider & Context
 export type {

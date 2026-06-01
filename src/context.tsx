@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-const DEFAULT_HOST = 'https://entrolytics.click';
+const DEFAULT_HOST = 'https://api.entrolytics.click';
 const SCRIPT_ID = 'entrolytics-script';
 
 import type { EventPayload } from '@entrolytics/shared';

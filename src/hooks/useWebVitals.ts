@@ -81,7 +81,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
         return;
       }
 
-      const host = config.host || 'https://entrolytics.click';
+      const host = config.host || 'https://api.entrolytics.click';
       const sessionId = getOrCreateSessionId();
       const visitorId = getOrCreateVisitorId();
       const payload = {

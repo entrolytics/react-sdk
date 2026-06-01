@@ -4,11 +4,11 @@ import { EntrolyticsProvider } from '../context.js';
 
 export interface AnalyticsProps extends Partial<EntrolyticsConfig> {
   /**
-   * Website ID - defaults to REACT_APP_ENTROLYTICS_WEBSITE_ID or VITE_ENTROLYTICS_WEBSITE_ID
+   * Website ID - defaults to VITE_ENTROLYTICS_WEBSITE_ID
    */
   websiteId?: string;
   /**
-   * API host - defaults to REACT_APP_ENTROLYTICS_HOST or VITE_ENTROLYTICS_HOST
+   * API host - defaults to VITE_ENTROLYTICS_HOST
    */
   host?: string;
   /**
@@ -19,21 +19,6 @@ export interface AnalyticsProps extends Partial<EntrolyticsConfig> {
 
 /**
  * Zero-config Analytics component that automatically reads from environment variables.
- *
- * @example
- * ```tsx
- * // For Create React App
- * import { Analytics } from '@entrolytics/react';
- *
- * function App() {
- *   return (
- *     <>
- *       <YourApp />
- *       <Analytics />
- *     </>
- *   );
- * }
- * ```
  *
  * @example
  * ```tsx
@@ -51,11 +36,9 @@ export interface AnalyticsProps extends Partial<EntrolyticsConfig> {
  * ```
  *
  * Environment variables:
- * - Create React App: REACT_APP_ENTROLYTICS_WEBSITE_ID, REACT_APP_ENTROLYTICS_HOST
  * - Vite: VITE_ENTROLYTICS_WEBSITE_ID, VITE_ENTROLYTICS_HOST
  */
 export function Analytics({ websiteId, host, children, ...config }: AnalyticsProps) {
-  // Support both Create React App (REACT_APP_) and Vite (VITE_) env vars
   type ImportMetaEnv = Record<string, string | boolean | undefined>;
   type GlobalWithProcess = typeof globalThis & {
     process?: {
@@ -79,18 +62,15 @@ export function Analytics({ websiteId, host, children, ...config }: AnalyticsPro
       ? importMetaEnv.VITE_ENTROLYTICS_HOST
       : undefined;
 
-  const finalWebsiteId = websiteId || processEnv.REACT_APP_ENTROLYTICS_WEBSITE_ID || viteWebsiteId;
-
-  const finalHost = host || processEnv.REACT_APP_ENTROLYTICS_HOST || viteHost;
+  const finalWebsiteId = websiteId || viteWebsiteId;
+  const finalHost = host || viteHost;
 
   // Show helpful warnings in development
   const isDev = processEnv.NODE_ENV === 'development' || importMetaEnv.DEV === true;
 
   if (isDev && !finalWebsiteId) {
     console.warn(
-      '[Entrolytics] Missing environment variable. Add one of the following to your .env file:\n' +
-        '  - Create React App: REACT_APP_ENTROLYTICS_WEBSITE_ID\n' +
-        '  - Vite: VITE_ENTROLYTICS_WEBSITE_ID\n' +
+      '[Entrolytics] Missing environment variable. Add VITE_ENTROLYTICS_WEBSITE_ID to your .env file\n' +
         'Or pass websiteId as a prop.',
     );
     return null;

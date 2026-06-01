@@ -111,14 +111,6 @@ function CheckoutButton() {
 The `<Analytics />` component automatically reads from your `.env` file:
 
 ```bash
-
-# Create React App
-
-REACT_APP_ENTROLYTICS_WEBSITE_ID=your-website-id
-REACT_APP_ENTROLYTICS_HOST=https://entrolytics.click
-
-# Vite
-
 VITE_ENTROLYTICS_WEBSITE_ID=your-website-id
 VITE_ENTROLYTICS_HOST=https://entrolytics.click
 ```
