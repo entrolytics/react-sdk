@@ -3,8 +3,8 @@
 
 [![npm](https://img.shields.io/npm/v/@entrolytics/react-sdk.svg?logo=npm)](https://www.npmjs.com/package/@entrolytics/react-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?logo=typescript\&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18+-61DAFB.svg?logo=react\&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB.svg?logo=react&logoColor=black)](https://react.dev/)
 
 </div>
 
@@ -94,7 +94,10 @@ function App() {
   return (
     <>
       <YourApp />
-      <Analytics />
+      <Analytics
+        websiteId={import.meta.env.VITE_ENTROLYTICS_WEBSITE_ID}
+        clientKey={import.meta.env.VITE_ENTROLYTICS_CLIENT_KEY}
+      />
     </>
   );
 }
@@ -108,35 +111,37 @@ function CheckoutButton() {
 }
 ```
 
-The `<Analytics />` component automatically reads from your `.env` file:
+Configure the public values in your application and pass them to the component:
 
 ```bash
 VITE_ENTROLYTICS_WEBSITE_ID=your-website-id
-VITE_ENTROLYTICS_HOST=https://entrolytics.click
+VITE_ENTROLYTICS_CLIENT_KEY=your-public-client-key
+VITE_ENTROLYTICS_HOST=https://api.entrolytics.click
 ```
 
 ## API Reference
 
 ### Analytics
 
-Zero-config component (recommended):
+Required public collection configuration:
 
 ```tsx
-<Analytics />
+<Analytics websiteId="your-website-id" clientKey="your-public-client-key" />
 ```
 
 With optional configuration:
 
 ```tsx
 <Analytics
+  websiteId="your-website-id"
+  clientKey="your-public-client-key"
   autoTrack={true}
   respectDnt={false}
   domains={['example.com']}
-  useEdgeRuntime={true} // Use edge-optimized endpoints (default: true)
 />
 ```
 
-The `<Analytics />` component supports the same props as `<EntrolyticsProvider>`. See [Runtime Configuration](#runtime-configuration) below for details on the `useEdgeRuntime` option.
+The `<Analytics />` component supports the same props as `<EntrolyticsProvider>`.
 
 ### EntrolyticsProvider
 
@@ -149,49 +154,12 @@ Wrap your app with the provider to enable analytics.
   autoTrack={true} // Auto-track page views (default: true)
   respectDnt={false} // Respect Do Not Track (default: false)
   domains={['example.com']} // Cross-domain tracking (optional)
-  useEdgeRuntime={true} // Use edge-optimized endpoints (default: true)
 >
   <App />
 </EntrolyticsProvider>
 ```
 
-#### Runtime Configuration
-
-The `useEdgeRuntime` prop controls which tracking script is loaded:
-
-**Edge Runtime (default)** - Optimized for speed and global distribution:
-
-```tsx
-<EntrolyticsProvider
-  websiteId="your-website-id"
-  useEdgeRuntime={true} // or omit (default)
->
-  <App />
-</EntrolyticsProvider>
-```
-
-- **Latency**: Sub-50ms response times globally
-- **Best for**: Production apps, globally distributed users
-- **Tracker Bundle**: Loads `/script-edge.js` (edge-optimized)
-
-**Node.js Runtime** - Full-featured with advanced capabilities:
-
-```tsx
-<EntrolyticsProvider websiteId="your-website-id" useEdgeRuntime={false}>
-  <App />
-</EntrolyticsProvider>
-```
-
-- **Features**: ClickHouse export, MaxMind GeoIP (city-level accuracy)
-- **Best for**: Self-hosted deployments, advanced analytics requirements
-- **Tracker Bundle**: Loads `/script.js` (standard runtime)
-
-**When to use Node.js runtime**:
-
-- Self-hosted deployments without edge runtime support
-- Applications requiring ClickHouse data export
-- Need for advanced geo-targeting with MaxMind
-- Custom server-side analytics workflows
+The provider loads the canonical `/script.js` tracker and sends collection requests to the configured host.
 
 ### Hooks
 

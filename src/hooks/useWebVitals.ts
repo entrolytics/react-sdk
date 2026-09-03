@@ -2,7 +2,7 @@ import { API_ROUTES } from '@entrolytics/shared';
 import type { NavigationType, VitalRating, VitalType } from '@entrolytics/shared';
 import { useCallback, useEffect, useRef } from 'react';
 import { useEntrolyticsContext } from '../context.js';
-import { getOrCreateSessionId, getOrCreateVisitorId } from './identity.js';
+import { generateUuid, getOrCreateSessionId, getOrCreateVisitorId } from './identity.js';
 
 export type WebVitalMetric = VitalType;
 export type WebVitalRating = VitalRating;
@@ -67,16 +67,16 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
   const { autoInit = true, reportAllChanges = false } = options;
   const { config, isReady } = useEntrolyticsContext();
   const initialized = useRef(false);
-  const missingApiKeyWarned = useRef(false);
+  const missingClientKeyWarned = useRef(false);
 
   const trackVital = useCallback(
     async (data: WebVitalData) => {
       if (typeof window === 'undefined') return;
 
-      if (!config.apiKey) {
-        if (!missingApiKeyWarned.current) {
-          console.warn('[Entrolytics] apiKey is required for /api/collect/vitals requests');
-          missingApiKeyWarned.current = true;
+      if (!config.clientKey) {
+        if (!missingClientKeyWarned.current) {
+          console.warn('[Entrolytics] clientKey is required for /api/collect/vitals requests');
+          missingClientKeyWarned.current = true;
         }
         return;
       }
@@ -86,6 +86,10 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
       const visitorId = getOrCreateVisitorId();
       const payload = {
         websiteId: config.websiteId,
+        clientKey: config.clientKey,
+        eventId: generateUuid(),
+        timestamp: new Date().toISOString(),
+        dnt: navigator.doNotTrack === '1',
         sessionId,
         visitorId,
         metricName: data.metric,
@@ -104,7 +108,6 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': config.apiKey,
           },
           body: JSON.stringify(payload),
           keepalive: true,
@@ -113,7 +116,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
         console.error('[Entrolytics] Failed to track vital:', err);
       }
     },
-    [config.websiteId, config.host, config.apiKey],
+    [config.websiteId, config.host, config.clientKey],
   );
 
   // Auto-initialize web-vitals integration
@@ -135,7 +138,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
-            navigationType: metric.navigationType as NavigationType,
+            navigationType: metric.navigationType,
             attribution: (metric as unknown as { attribution?: Record<string, unknown> })
               .attribution,
           });
@@ -148,7 +151,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
-            navigationType: metric.navigationType as NavigationType,
+            navigationType: metric.navigationType,
             attribution: (metric as unknown as { attribution?: Record<string, unknown> })
               .attribution,
           });
@@ -161,7 +164,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
-            navigationType: metric.navigationType as NavigationType,
+            navigationType: metric.navigationType,
             attribution: (metric as unknown as { attribution?: Record<string, unknown> })
               .attribution,
           });
@@ -174,7 +177,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
-            navigationType: metric.navigationType as NavigationType,
+            navigationType: metric.navigationType,
             attribution: (metric as unknown as { attribution?: Record<string, unknown> })
               .attribution,
           });
@@ -187,7 +190,7 @@ export function useWebVitals(options: UseWebVitalsOptions = {}) {
             rating: metric.rating,
             delta: metric.delta,
             id: metric.id,
-            navigationType: metric.navigationType as NavigationType,
+            navigationType: metric.navigationType,
             attribution: (metric as unknown as { attribution?: Record<string, unknown> })
               .attribution,
           });

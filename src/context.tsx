@@ -20,12 +20,10 @@ export type EventData = NonNullable<EventPayload['properties']>;
 export interface EntrolyticsConfig {
   websiteId: string;
   host?: string;
-  apiKey?: string;
+  clientKey: string;
   autoTrack?: boolean;
   respectDnt?: boolean;
   domains?: string[];
-  /** Use edge runtime endpoints for faster response times (default: true) */
-  useEdgeRuntime?: boolean;
   /** Custom tag for A/B testing */
   tag?: string;
   /** Strip query parameters from URLs */
@@ -56,6 +54,10 @@ export interface EntrolyticsContextValue {
 
 const EntrolyticsContext = createContext<EntrolyticsContextValue | null>(null);
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
 declare global {
   interface Window {
     entrolytics?: EntrolyticsInstance;
@@ -66,11 +68,10 @@ export interface EntrolyticsProviderProps {
   children: ReactNode;
   websiteId: string;
   host?: string;
-  apiKey?: string;
+  clientKey: string;
   autoTrack?: boolean;
   respectDnt?: boolean;
   domains?: string[];
-  useEdgeRuntime?: boolean;
   tag?: string;
   excludeSearch?: boolean;
   excludeHash?: boolean;
@@ -81,37 +82,34 @@ export function EntrolyticsProvider({
   children,
   websiteId,
   host = DEFAULT_HOST,
-  apiKey,
+  clientKey,
   autoTrack = true,
   respectDnt = false,
   domains,
-  useEdgeRuntime = true,
   tag,
   excludeSearch = false,
   excludeHash = false,
   beforeSend,
 }: EntrolyticsProviderProps) {
-  const [isReady, setIsReady] = useState(false);
-  const isLoadedRef = useRef(false);
+  const [isLoaded, setIsLoaded] = useState(
+    () => typeof document !== 'undefined' && document.getElementById(SCRIPT_ID) !== null,
+  );
   const tagRef = useRef(tag);
 
   // Inject tracking script
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return undefined;
     if (document.getElementById(SCRIPT_ID)) {
-      isLoadedRef.current = true;
-      setIsReady(true);
-      return;
+      return undefined;
     }
 
     const script = document.createElement('script');
     script.id = SCRIPT_ID;
 
-    // Use edge runtime script if enabled
-    const scriptPath = useEdgeRuntime ? '/script-edge.js' : '/script.js';
-    script.src = `${host.replace(/\/$/, '')}${scriptPath}`;
+    script.src = `${host.replace(/\/$/, '')}/script.js`;
     script.defer = true;
     script.dataset.websiteId = websiteId;
+    script.dataset.clientKey = clientKey;
 
     if (!autoTrack) {
       script.dataset.autoTrack = 'false';
@@ -133,8 +131,7 @@ export function EntrolyticsProvider({
     }
 
     script.onload = () => {
-      isLoadedRef.current = true;
-      setIsReady(true);
+      setIsLoaded(true);
     };
 
     document.head.appendChild(script);
@@ -145,17 +142,7 @@ export function EntrolyticsProvider({
         existingScript.remove();
       }
     };
-  }, [
-    websiteId,
-    host,
-    autoTrack,
-    respectDnt,
-    domains,
-    useEdgeRuntime,
-    tag,
-    excludeSearch,
-    excludeHash,
-  ]);
+  }, [websiteId, clientKey, host, autoTrack, respectDnt, domains, tag, excludeSearch, excludeHash]);
 
   const waitForTracker = useCallback((callback: () => void) => {
     if (typeof window === 'undefined') return;
@@ -181,11 +168,13 @@ export function EntrolyticsProvider({
           if (payload === null) return;
         }
 
-        if (tagRef.current) {
-          (payload as Record<string, unknown>).tag = tagRef.current;
-        }
-
-        window.entrolytics?.track(eventName, eventData as Record<string, unknown>);
+        const outgoingName =
+          isRecord(payload) && typeof payload.name === 'string' ? payload.name : eventName;
+        const outgoingData = isRecord(payload) && isRecord(payload.data) ? payload.data : eventData;
+        window.entrolytics?.track(
+          outgoingName,
+          tagRef.current ? { ...outgoingData, tag: tagRef.current } : outgoingData,
+        );
       });
     },
     [waitForTracker, beforeSend],
@@ -263,18 +252,17 @@ export function EntrolyticsProvider({
       config: {
         websiteId,
         host,
-        apiKey,
+        clientKey,
         autoTrack,
         respectDnt,
         domains,
-        useEdgeRuntime,
         tag,
         excludeSearch,
         excludeHash,
         beforeSend,
       },
-      isLoaded: isLoadedRef.current,
-      isReady,
+      isLoaded,
+      isReady: isLoaded,
       track,
       trackPageView,
       trackRevenue,
@@ -286,16 +274,15 @@ export function EntrolyticsProvider({
     [
       websiteId,
       host,
-      apiKey,
+      clientKey,
       autoTrack,
       respectDnt,
       domains,
-      useEdgeRuntime,
       tag,
       excludeSearch,
       excludeHash,
       beforeSend,
-      isReady,
+      isLoaded,
       track,
       trackPageView,
       trackRevenue,

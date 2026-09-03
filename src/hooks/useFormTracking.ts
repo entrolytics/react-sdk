@@ -2,7 +2,7 @@ import { API_ROUTES } from '@entrolytics/shared';
 import type { FormEventType } from '@entrolytics/shared';
 import { useCallback, useEffect, useRef } from 'react';
 import { useEntrolyticsContext } from '../context.js';
-import { getOrCreateSessionId, getOrCreateVisitorId } from './identity.js';
+import { generateUuid, getOrCreateSessionId, getOrCreateVisitorId } from './identity.js';
 
 export type { FormEventType };
 
@@ -94,7 +94,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
   } = options;
   const { config } = useEntrolyticsContext();
   const formRef = useRef<HTMLFormElement | null>(null);
-  const missingApiKeyWarned = useRef(false);
+  const missingClientKeyWarned = useRef(false);
   const stateRef = useRef<FormState>({
     startTime: null,
     fieldStartTimes: new Map(),
@@ -109,10 +109,10 @@ export function useFormTracking(options: UseFormTrackingOptions) {
     ) => {
       if (typeof window === 'undefined') return;
 
-      if (!config.apiKey) {
-        if (!missingApiKeyWarned.current) {
-          console.warn('[Entrolytics] apiKey is required for /api/collect/forms requests');
-          missingApiKeyWarned.current = true;
+      if (!config.clientKey) {
+        if (!missingClientKeyWarned.current) {
+          console.warn('[Entrolytics] clientKey is required for /api/collect/forms requests');
+          missingClientKeyWarned.current = true;
         }
         return;
       }
@@ -132,10 +132,13 @@ export function useFormTracking(options: UseFormTrackingOptions) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': config.apiKey,
           },
           body: JSON.stringify({
             websiteId: config.websiteId,
+            clientKey: config.clientKey,
+            eventId: generateUuid(),
+            timestamp: new Date().toISOString(),
+            dnt: navigator.doNotTrack === '1',
             sessionId,
             visitorId,
             ...payload,
@@ -146,7 +149,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
         console.error('[Entrolytics] Failed to track form event:', err);
       }
     },
-    [config.websiteId, config.host, config.apiKey, formId, formName],
+    [config.websiteId, config.host, config.clientKey, formId, formName],
   );
 
   const trackStart = useCallback(() => {
@@ -252,7 +255,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
 
   // Auto-track field interactions
   useEffect(() => {
-    if (!autoTrack || !formRef.current) return;
+    if (!autoTrack || !formRef.current) return undefined;
 
     const form = formRef.current;
 
@@ -291,7 +294,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
 
   // Track abandonment on page unload
   useEffect(() => {
-    if (!trackAbandonment) return;
+    if (!trackAbandonment) return undefined;
 
     const handleBeforeUnload = () => {
       if (stateRef.current.hasInteracted && stateRef.current.startTime) {

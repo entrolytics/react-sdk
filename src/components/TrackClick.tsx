@@ -2,6 +2,13 @@ import type { MouseEvent, ReactElement } from 'react';
 import { cloneElement, isValidElement, useCallback } from 'react';
 import { type EventData, useEntrolyticsContext } from '../context.js';
 
+type ClickHandler = (event: MouseEvent) => void;
+type ClickableElementProps = { onClick?: ClickHandler };
+
+function isClickableElement(element: ReactElement): element is ReactElement<ClickableElementProps> {
+  return isValidElement<ClickableElementProps>(element);
+}
+
 export interface TrackClickProps {
   /** Event name to track */
   event: string;
@@ -23,23 +30,14 @@ export interface TrackClickProps {
  */
 export function TrackClick({ event, data, children }: TrackClickProps) {
   const { track } = useEntrolyticsContext();
-  type ClickHandler = (event: MouseEvent) => void;
-  type ClickableElementProps = { onClick?: ClickHandler };
-
-  const getChildOnClick = (
-    element: ReactElement<ClickableElementProps>,
-  ): ClickHandler | undefined => {
-    return element.props.onClick;
-  };
 
   const handleClick = useCallback(
     (e: MouseEvent) => {
       track(event, data);
 
       // Call original onClick if it exists
-      if (isValidElement(children)) {
-        const child = children as ReactElement<ClickableElementProps>;
-        const onClick = getChildOnClick(child);
+      if (isClickableElement(children)) {
+        const onClick = children.props.onClick;
         if (onClick) {
           onClick(e);
         }
@@ -48,14 +46,12 @@ export function TrackClick({ event, data, children }: TrackClickProps) {
     [event, data, track, children],
   );
 
-  if (!isValidElement(children)) {
+  if (!isClickableElement(children)) {
     console.warn('TrackClick requires a valid React element as child');
     return children;
   }
 
-  const child = children as ReactElement<ClickableElementProps>;
-
-  return cloneElement(child, {
+  return cloneElement(children, {
     onClick: handleClick,
   });
 }
