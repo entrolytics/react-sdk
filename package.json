@@ -1,6 +1,6 @@
 {
   "name": "@entrolytics/react-sdk",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "React SDK for Entrolytics - First-party growth analytics for the edge",
   "keywords": [
     "analytics",
@@ -55,8 +55,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@entrolytics/shared": "^3.0.0",
-    "@entrolytics/trpc-client": "^3.0.0",
+    "@entrolytics/shared": "^3.0.1",
+    "@entrolytics/trpc-client": "^3.0.1",
     "@tanstack/react-query": "^5.102.8",
     "@trpc/client": "^11.18.0",
     "@trpc/react-query": "^11.18.0"
@@ -67,9 +67,8 @@
     "react": "canary",
     "react-dom": "canary",
     "typescript": "next",
-    "vite": "^8.2.2",
-    "vite-plus": "^0.3.1",
-    "vitest": "^5.0.0"
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   },
   "peerDependencies": {
     "react": ">=19.2.6",

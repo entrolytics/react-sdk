@@ -10,7 +10,7 @@ export default defineConfig({
     sourcemap: true,
     treeshake: true,
     minify: false,
-    deps: {
+    deps: { resolveDepSubpath: true,
       neverBundle: ['react', 'react-dom'],
     },
   },
