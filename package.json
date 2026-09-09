@@ -44,14 +44,14 @@
     "access": "public"
   },
   "scripts": {
-    "build": "vp pack && tsc --emitDeclarationOnly --noEmit false",
-    "check": "vp check",
-    "dev": "vp pack --watch",
-    "lint": "vp lint --fix . && vp fmt --write .",
-    "lint:fix-unsafe": "vp lint -f stylish --import-plugin --type-aware --type-check --vitest-plugin --fix --fix-suggestions --fix-dangerously src/",
-    "prepublishOnly": "vp run build",
-    "test": "vp test run",
-    "test:watch": "vp test",
+    "build": "tsdown && tsc --emitDeclarationOnly --noEmit false",
+    "check": "tsc --noEmit",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --fix . && oxfmt --write .",
+    "lint:fix-unsafe": "oxlint -f stylish --import-plugin --type-aware --type-check --vitest-plugin --fix --fix-suggestions --fix-dangerously src/",
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -64,11 +64,13 @@
   "devDependencies": {
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
     "react": "canary",
     "react-dom": "canary",
+    "tsdown": "^0.23.0",
     "typescript": "next",
-    "vite": "catalog:",
-    "vite-plus": "catalog:"
+    "vitest": "^5.0.0"
   },
   "peerDependencies": {
     "react": ">=19.2.6",
