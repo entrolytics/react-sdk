@@ -12,12 +12,12 @@
     "web-analytics",
     "web-vitals"
   ],
-  "homepage": "https://entrolytics.click",
+  "homepage": "https://entrolytics.dev",
   "bugs": {
     "url": "https://github.com/entrolytics/react-sdk/issues"
   },
   "license": "MIT",
-  "author": "Entrolytics <hey@entrolytics.click>",
+  "author": "Entrolytics <hey@entrolytics.dev>",
   "repository": {
     "type": "git",
     "url": "https://github.com/entrolytics/react-sdk",
@@ -66,15 +66,15 @@
     "@types/react-dom": "^19.2.7",
     "oxfmt": "^0.67.0",
     "oxlint": "^1.82.0",
-    "react": "canary",
-    "react-dom": "canary",
+    "react": "latest",
+    "react-dom": "latest",
     "tsdown": "^0.23.0",
     "typescript": "next",
     "vitest": "^5.0.0"
   },
   "peerDependencies": {
-    "react": ">=19.2.6",
-    "react-dom": ">=19.2.6"
+    "react": ">=19.3.0",
+    "react-dom": ">=19.3.0"
   },
   "peerDependenciesMeta": {
     "web-vitals": {
@@ -85,7 +85,7 @@
     "web-vitals": "^6.2.1"
   },
   "engines": {
-    "node": ">=24.20.0"
+    "node": ">=24.21.0"
   },
-  "packageManager": "pnpm@11.26.0"
+  "packageManager": "pnpm@11.27.1"
 }

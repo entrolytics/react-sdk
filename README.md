@@ -116,7 +116,7 @@ Configure the public values in your application and pass them to the component:
 ```bash
 VITE_ENTROLYTICS_WEBSITE_ID=your-website-id
 VITE_ENTROLYTICS_CLIENT_KEY=your-public-client-key
-VITE_ENTROLYTICS_HOST=https://api.entrolytics.click
+VITE_ENTROLYTICS_HOST=https://api.entrolytics.dev
 ```
 
 ## API Reference
@@ -150,7 +150,7 @@ Wrap your app with the provider to enable analytics.
 ```tsx
 <EntrolyticsProvider
   websiteId="your-website-id"
-  host="https://entrolytics.click" // Optional, for self-hosted
+  host="https://entrolytics.dev" // Optional, for self-hosted
   autoTrack={true} // Auto-track page views (default: true)
   respectDnt={false} // Respect Do Not Track (default: false)
   domains={['example.com']} // Cross-domain tracking (optional)
