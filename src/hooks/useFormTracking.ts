@@ -1,5 +1,5 @@
-import { API_ROUTES } from '@entrolytics/shared';
-import type { FormEventType } from '@entrolytics/shared';
+import { API_ROUTES, isFormFieldType } from '@entrolytics/shared';
+import type { FormEventType, FormFieldType } from '@entrolytics/shared';
 import { useCallback, useEffect, useRef } from 'react';
 import { useEntrolyticsContext } from '../context.js';
 import { generateUuid, getOrCreateSessionId, getOrCreateVisitorId } from './identity.js';
@@ -42,6 +42,27 @@ export interface UseFormTrackingOptions {
   trackTiming?: boolean;
   /** Detect form abandonment (default: true) */
   trackAbandonment?: boolean;
+}
+
+/**
+ * Map an HTML control type (e.g. `select-one`, `datetime-local`) onto the
+ * field types accepted by /api/collect/forms. Unknown types become `other`.
+ */
+export function toFormFieldType(type: string): FormFieldType {
+  switch (type) {
+    case 'select-one':
+    case 'select-multiple':
+      return 'select';
+    case 'datetime-local':
+    case 'month':
+    case 'week':
+    case 'time':
+      return 'date';
+    case 'search':
+      return 'text';
+    default:
+      return isFormFieldType(type) ? type : 'other';
+  }
 }
 
 interface FormState {
@@ -142,6 +163,7 @@ export function useFormTracking(options: UseFormTrackingOptions) {
             sessionId,
             visitorId,
             ...payload,
+            ...(payload.fieldType && { fieldType: toFormFieldType(payload.fieldType) }),
           }),
           keepalive: true,
         });
