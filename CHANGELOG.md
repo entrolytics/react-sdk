@@ -5,6 +5,8 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [3.0.2] - 2026-11-26
+
 ### Fixed
 
 - The default `host` is `https://api.entrolytics.dev`, the production API. Apps that set `host`
@@ -17,3 +19,6 @@ All notable changes to this project are documented in this file. The format foll
 - Consumes `@entrolytics/shared` 3.2.1 and `@entrolytics/trpc-client` 3.1.1.
 - Dependencies updated to their latest releases (tRPC 11.31, TanStack Query 5.108); the
   toolchain moved to tsdown, the oxc tools and pnpm 12.23.
+
+[Unreleased]: https://github.com/entrolytics/react-sdk/compare/v3.0.2...HEAD
+[3.0.2]: https://github.com/entrolytics/react-sdk/releases/tag/v3.0.2
