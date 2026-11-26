@@ -5,6 +5,8 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [3.0.3] - 2026-11-26
+
 ### Changed
 
 - Depends on tRPC 11.31.4.
@@ -25,5 +27,6 @@ All notable changes to this project are documented in this file. The format foll
 - Dependencies updated to their latest releases (tRPC 11.31, TanStack Query 5.108); the
   toolchain moved to tsdown, the oxc tools and pnpm 12.23.
 
-[Unreleased]: https://github.com/entrolytics/react-sdk/compare/v3.0.2...HEAD
+[Unreleased]: https://github.com/entrolytics/react-sdk/compare/v3.0.3...HEAD
+[3.0.3]: https://github.com/entrolytics/react-sdk/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/entrolytics/react-sdk/releases/tag/v3.0.2
