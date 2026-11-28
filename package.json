@@ -1,6 +1,6 @@
 {
   "name": "@entrolytics/react-sdk",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "React SDK for Entrolytics - First-party growth analytics for the edge",
   "keywords": [
     "analytics",
