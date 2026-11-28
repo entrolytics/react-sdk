@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [3.0.6] - 2026-11-28
+
+### Bug Fixes
+
+- **deps:** @entrolytics/trpc-client 4.0.2 ([739b158](https://github.com/entrolytics/react-sdk/commit/739b158))
+
 ## [3.0.5] - 2026-11-28
 
 ### Changed
@@ -43,7 +49,8 @@ All notable changes to this project are documented in this file. The format foll
 - Dependencies updated to their latest releases (tRPC 11.31, TanStack Query 5.108); the
   toolchain moved to tsdown, the oxc tools and pnpm 12.23.
 
-[Unreleased]: https://github.com/entrolytics/react-sdk/compare/v3.0.5...HEAD
+[Unreleased]: https://github.com/entrolytics/react-sdk/compare/v3.0.6...HEAD
+[3.0.6]: https://github.com/entrolytics/react-sdk/compare/v3.0.5...v3.0.6
 [3.0.5]: https://github.com/entrolytics/react-sdk/compare/v3.0.4...v3.0.5
 [3.0.4]: https://github.com/entrolytics/react-sdk/compare/v3.0.3...v3.0.4
 [3.0.3]: https://github.com/entrolytics/react-sdk/compare/v3.0.2...v3.0.3
