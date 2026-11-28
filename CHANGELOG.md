@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+### Changed
+
+- The `react` and `react-dom` peer range is `>=19` (was `>=19.3.0`), so apps on React 19.0 to
+  19.2 install without a peer warning.
+- Requires `@entrolytics/shared` 3.2.2.
+- `@trpc/client` and `@trpc/react-query` 11.32.2.
+
 ## [3.0.4] - 2026-11-28
 
 ### Changed
