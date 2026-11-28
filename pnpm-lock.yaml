@@ -189,8 +189,8 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2
       '@entrolytics/trpc-client':
-        specifier: ^4.0.0
-        version: 4.0.0(fastify@6.0.0-alpha.6)(typescript@7.1.0-dev.20261128.1)
+        specifier: ^4.0.2
+        version: 4.0.2(fastify@6.0.0-alpha.6)(typescript@7.1.0-dev.20261128.1)
       '@tanstack/react-query':
         specifier: ^5.108.4
         version: 5.108.4(@types/react@19.3.3)(react@19.3.1)
@@ -235,8 +235,8 @@ importers:
 
 packages:
 
-  '@entrolytics/api-types@7.0.0':
-    resolution: {integrity: sha512-v4NlVRNVTie7ZLVaApyjI4y1ikYWDjoT5KPrWkT2vgICtJqMlhrabEpWlWQvqkzq0TP1cDc1B9kKWAqbRsVCfw==}
+  '@entrolytics/api-types@7.1.0':
+    resolution: {integrity: sha512-GzX9ci5C02ki23WULpOvnhlCYjORpryT+S+THFLdyE/StuDYdpyJqp1HCmK9/EAKgxZ9go3bS7WHzItfkBbVTw==}
 
   '@entrolytics/config@5.0.0':
     resolution: {integrity: sha512-BkprEh11JZfYY87YIoJBSmJNQzQ93NWrHGGdAcvKwtHrvkiThCgz4LODC5SGTSIkgxkf37GyhaoFoBuXsbVC+Q==}
@@ -247,8 +247,8 @@ packages:
   '@entrolytics/shared@3.2.2':
     resolution: {integrity: sha512-+V0EgIAuIaMLnjU6LHuu7fJuGX0M/Q/BaGhfF72BRQBnpon7+/1bXVFMhscqgX9WXre9Vh9dbvEBG84A98VLJA==}
 
-  '@entrolytics/trpc-client@4.0.0':
-    resolution: {integrity: sha512-XzT/lk2Z2p+EkyLO/DUGPDaiysUl2NOV1qwy0i1f6Yv37XDXBoC85CXb9iJhdgKU4FrzPxabpXjTnt4zEBhhnQ==}
+  '@entrolytics/trpc-client@4.0.2':
+    resolution: {integrity: sha512-EQGNEDXdlIfwTCPdp/uyEzDbs5c+gwAgLb9hARzn9U5/Kv76B6TvOSBi/gZFHHQ5V+Wwr06r0ZngaFYNQOCGJg==}
 
   '@fastify/ajv-compiler@4.0.8':
     resolution: {integrity: sha512-xYcAFYoyP/NELMgj6I7LmMAmiqeXMal0wsM2SgueN9OyMr6bVKHomO9OxuStC7bIAEl4Z3JXBbDPwpXRp59NPQ==}
@@ -1365,7 +1365,7 @@ packages:
 
 snapshots:
 
-  '@entrolytics/api-types@7.0.0(typescript@7.1.0-dev.20261128.1)':
+  '@entrolytics/api-types@7.1.0(typescript@7.1.0-dev.20261128.1)':
     dependencies:
       '@entrolytics/config': 5.0.0
       '@entrolytics/protocol': 4.1.0
@@ -1389,9 +1389,9 @@ snapshots:
 
   '@entrolytics/shared@3.2.2': {}
 
-  '@entrolytics/trpc-client@4.0.0(fastify@6.0.0-alpha.6)(typescript@7.1.0-dev.20261128.1)':
+  '@entrolytics/trpc-client@4.0.2(fastify@6.0.0-alpha.6)(typescript@7.1.0-dev.20261128.1)':
     dependencies:
-      '@entrolytics/api-types': 7.0.0(typescript@7.1.0-dev.20261128.1)
+      '@entrolytics/api-types': 7.1.0(typescript@7.1.0-dev.20261128.1)
       '@entrolytics/shared': 3.2.2
       '@trpc/client': 11.32.2(@trpc/server@11.32.2(fastify@6.0.0-alpha.6)(typescript@7.1.0-dev.20261128.1))(typescript@7.1.0-dev.20261128.1)
       '@trpc/server': 11.32.2(fastify@6.0.0-alpha.6)(typescript@7.1.0-dev.20261128.1)

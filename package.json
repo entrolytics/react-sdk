@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@entrolytics/shared": "^3.2.2",
-    "@entrolytics/trpc-client": "^4.0.0",
+    "@entrolytics/trpc-client": "^4.0.2",
     "@tanstack/react-query": "^5.108.4",
     "@trpc/client": "^11.32.2",
     "@trpc/react-query": "^11.32.2"
