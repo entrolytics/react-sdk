@@ -5,6 +5,8 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [3.0.4] - 2026-11-28
+
 ### Changed
 
 - Depends on `@entrolytics/trpc-client` 4.0.0, whose router types describe the API after sign-in
@@ -32,6 +34,7 @@ All notable changes to this project are documented in this file. The format foll
 - Dependencies updated to their latest releases (tRPC 11.31, TanStack Query 5.108); the
   toolchain moved to tsdown, the oxc tools and pnpm 12.23.
 
-[Unreleased]: https://github.com/entrolytics/react-sdk/compare/v3.0.3...HEAD
+[Unreleased]: https://github.com/entrolytics/react-sdk/compare/v3.0.4...HEAD
+[3.0.4]: https://github.com/entrolytics/react-sdk/compare/v3.0.3...v3.0.4
 [3.0.3]: https://github.com/entrolytics/react-sdk/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/entrolytics/react-sdk/releases/tag/v3.0.2
